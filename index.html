@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cryptocurrency Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div id="app" class="max-w-[1000px] mx-auto">
+      <h1 class="font-bold text-3xl text-center text-blue-600 my-4">Cryptocurrency Data</h1>
+      <div id="crypto-table" class="flex justify-center"></div>
+    </div>
+    <script>
+      const table = (content) => `<table class="table-auto w-full">${content}</table>`
+      const row = (k, v, i) => {
+        return `<tr>
+            <td class="w-20 p-6 align-top border-b ${i===0 && ' border-t'} border-gray-200"><img class="h-full w-auto" src="${v['image']}" /></td>
+            <td class="p-6 align-top border-b ${i === 0 && 'border-t'} border-gray-200"><a href="${v['website']}" target="_blank" class="font-bold">${v['name']}</a></td>
+            <td class="p-6 align-top border-b ${i === 0 && 'border-t'} border-gray-200">${v['summary']}</td>
+            </tr>`
+      }      
+
+      const createTable = (data) => {
+        const tableContent = Object.entries(data).map(([k, v], i) => row(k, v, i)).join('');
+        document.getElementById('crypto-table').innerHTML = table(tableContent);
+      }
+
+      const url = "https://api.mtw-testnet.com/assets/all"
+      fetch(url)
+        .then((response) => {
+          return response.json()
+        })
+        .then((v) => createTable(v))
+        .catch((err) => console.log(err))
+    </script>
+  </body>
+</html>
